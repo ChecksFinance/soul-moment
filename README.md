@@ -5,7 +5,7 @@
   Soul Moment
 </h2>
 <p align="center">
-  An attempt to provide an implementation of SBT(Soul-bound token) in the cairo language.
+  An attempt to provide an implementation of SBT(Soul-bound token) in Cairo lang.
 </p>
 <p align="center">
   Brought to you by <a href="https://twitter.com/checksfinance">@ChecksFinance</a>.
@@ -17,7 +17,7 @@
   </a>
 </p>
 
-This module is implemented on StarkNet by the Cairo language. Using this module requires that you have a basic understanding of the Cairo language and python.
+This module is implemented on StarkNet in Cairo language. Using this module requires that you have a basic understanding of the Cairo language and python.
 
 ## Concepts
 
