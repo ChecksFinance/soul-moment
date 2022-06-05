@@ -2,6 +2,5 @@ wheel
 cairo-lang
 cairo-nile
 starknet-devnet
-openzeppelin-cairo-contracts="git+https://github.com/OpenZeppelin/cairo-contracts.git"
 pytest-cairo
 tox

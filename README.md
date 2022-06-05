@@ -1,5 +1,7 @@
 # Soul Moment
 
+An attempt to provide an implementation of SBT in the cairo language.
+
 ### Set up the project
 
 #### Create a Python virtual environment
@@ -15,7 +17,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Then, install the latest version of OZ contract for Cairo:
+Then, install the latest version of OpenZeppelin contract for Cairo:
 
 ```bash
 pip install git+https://github.com/OpenZeppelin/cairo-contracts.git

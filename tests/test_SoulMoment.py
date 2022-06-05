@@ -12,7 +12,7 @@ SYMBOL = str_to_felt("STARK")
 
 @pytest.fixture
 def contract_defs():
-    erc721_def = get_contract_def('ERC721.cairo')
+    erc721_def = get_contract_def('SoulMoment.cairo')
     return erc721_def
 
 @pytest.fixture
