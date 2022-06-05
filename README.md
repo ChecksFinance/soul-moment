@@ -35,7 +35,7 @@ Then
 from soulmoment.library import SoulMoment
 ```
 
-you can find demo contracts in `./contracts/account`
+you can find demo contracts in `./src/account` and `./src/soulmoment`
 
 ### Set up the project
 
@@ -57,7 +57,8 @@ pip install -r requirements.txt
 ### ⛏️ Compile
 
 ```bash
-nile compile
+nile compile --directory src
+nile compile src/soulmoment/account/SoulAccount.cairo --account_contract
 ```
 
 ### 🌡️ Test
