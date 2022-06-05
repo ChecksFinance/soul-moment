@@ -142,7 +142,7 @@ namespace SoulMoment:
 
         let (balance: Uint256) = ERC721_balance.read()
         let (token_id: Uint256) = SafeUint256.add(balance, Uint256(1, 0))
-        let (owner) = ERC721_owner()
+        let (owner) = ERC721_owner.read()
 
         ERC721_balance.write(token_id)
         ERC721_token_uri.write(token_id, content)
@@ -160,7 +160,7 @@ namespace SoulMoment:
         with_attr error_message("SoulMoment: token_id is not a valid Uint256"):
             uint256_check(token_id)
         end
-        let (owner) = ERC721_owner()
+        let (owner) = ERC721_owner.read()
 
         # Clear approvals
         # _approve(0, token_id)
@@ -182,7 +182,7 @@ namespace SoulMoment:
     }(token_id: Uint256):
         uint256_check(token_id)
         let (caller) = get_caller_address()
-        let (owner) = ERC721_owner()
+        let (owner) = ERC721_owner.read()
 
         with_attr error_message("SoulMoment: caller is not the token owner"):
             assert caller = owner
