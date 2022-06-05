@@ -19,7 +19,7 @@
 
 This module is implemented on StarkNet by the Cairo language. Using this module requires that you have a basic understanding of the Cairo language and python.
 
-### Concepts
+## Concepts
 
 One of the most important concepts of SBT is non-transferable and verifiable split property rights. This basic logic is explored in a very simple way by implementing the issuance and verification of SBTs on L2's abstract account contracts.
 

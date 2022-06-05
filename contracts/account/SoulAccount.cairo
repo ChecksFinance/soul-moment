@@ -6,6 +6,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.starknet.common.syscalls import get_contract_address
+from starkware.cairo.common.uint256 import Uint256
 
 from openzeppelin.account.library import Account, AccountCallArray
 from openzeppelin.introspection.ERC165 import ERC165
@@ -62,6 +63,26 @@ func supportsInterface{
     return (success)
 end
 
+@view
+func soul_moment{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr
+    } (token_id: felt) -> (uri: felt):
+    let (uri) = SoulMoment.tokenURI(token_id)
+    return (uri)
+end
+
+@view
+func count_soul_moment{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr
+    } () -> (balance: Uint256):
+    let (balance) = SoulMoment.balance()
+    return (balance)
+end
+
 #
 # Setters
 #
@@ -81,9 +102,20 @@ func mint_soul_moment{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-    }():
+    }(content: felt):
     Account.assert_only_self()
-    SoulMoment._mint()
+    SoulMoment.mint(content)
+    return ()
+end
+
+@external
+func burn_soul_moment{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(token_id: felt):
+    Account.assert_only_self()
+    SoulMoment.burn(token_id)
     return ()
 end
 
