@@ -4,3 +4,4 @@ cairo-nile
 starknet-devnet
 pytest-cairo
 tox
+git+https://github.com/OpenZeppelin/cairo-contracts.git

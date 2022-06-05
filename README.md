@@ -52,11 +52,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Then, install the latest version of OpenZeppelin contract for Cairo:
-
-```bash
-pip install git+https://github.com/OpenZeppelin/cairo-contracts.git
-```
+**Notice**: this project use the latest version of OpenZeppelin contract for Cairo instead of the stable release of it.
 
 ### ⛏️ Compile
 
