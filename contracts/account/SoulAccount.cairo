@@ -5,6 +5,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
+from starkware.starknet.common.syscalls import get_contract_address
 
 from openzeppelin.account.library import Account, AccountCallArray
 from openzeppelin.introspection.ERC165 import ERC165
@@ -21,8 +22,9 @@ func constructor{
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
     }(public_key: felt):
+    let (self) = get_contract_address()
     Account.initializer(public_key)
-    SoulMoment.initializer(public_key, 'SOULMOMENT')
+    SoulMoment.initializer(public_key, 'SOULMOMENT', self)
     return ()
 end
 
