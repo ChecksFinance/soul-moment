@@ -11,7 +11,7 @@ from starkware.cairo.common.uint256 import Uint256
 from openzeppelin.account.library import Account, AccountCallArray
 from openzeppelin.introspection.ERC165 import ERC165
 
-from contracts.library import SoulMoment
+from src.soulmoment.library import SoulMoment
 
 #
 # Constructor
