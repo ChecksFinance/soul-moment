@@ -68,7 +68,7 @@ func soul_moment{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
-    } (token_id: felt) -> (uri: felt):
+    } (token_id: Uint256) -> (uri: felt):
     let (uri) = SoulMoment.tokenURI(token_id)
     return (uri)
 end
@@ -113,7 +113,7 @@ func burn_soul_moment{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-    }(token_id: felt):
+    }(token_id: Uint256):
     Account.assert_only_self()
     SoulMoment.burn(token_id)
     return ()
