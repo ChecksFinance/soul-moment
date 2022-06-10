@@ -18,6 +18,11 @@ from openzeppelin.utils.constants import (
     IERC721_ID, IERC721_METADATA_ID
 )
 
+struct Token:
+    member id: Uint256
+    member uri: felt
+end
+
 #
 # Events
 #
@@ -51,6 +56,14 @@ end
 
 @storage_var
 func ERC721_token_uri(token_id: Uint256) -> (token_uri: felt):
+end
+
+@storage_var
+func moment_type_index(moment_type: felt) -> (res: felt):
+end
+
+@storage_var
+func token_by_moment_type(moment_type: felt, index: felt) -> (token_id: Uint256k):
 end
 
 namespace SoulMoment:
@@ -107,6 +120,15 @@ namespace SoulMoment:
         return (balance)
     end
 
+    func balance_by_moment_type{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(moment_type: felt) -> (balance: felt):
+        let (balance: felt) = moment_type_index.read(moment_type)
+        return (balance)
+    end
+
     func owner{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
@@ -131,24 +153,53 @@ namespace SoulMoment:
         return (token_uri)
     end
 
+    func tokens_by_moment_type{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr
+    }(moment_type: felt) -> (
+        tokens_len: felt,
+        tokens: Token*
+    ):
+        alloc_locals
+
+        let (tokens) = alloc()
+        let (len) = balance_by_moment_type(moment_type)
+
+        if len == 0:
+            return (tokens_len=len, tokens=tokens)
+        end
+
+        _read_token_by_moment_type(
+            moment_type=moment_type,
+            arr_index=0,
+            arr_len=len,
+            arr=tokens
+        )
+
+        return (tokens_len=len, tokens=tokens)
+    end
+
     func mint{
             pedersen_ptr: HashBuiltin*,
             syscall_ptr: felt*,
             range_check_ptr
         }(content: felt):
-        with_attr error_message("SoulMoment: cannot mint with blank content"):
-            assert_not_zero(content)
-        end
-
-        let (balance: Uint256) = ERC721_balance.read()
-        let (token_id: Uint256) = SafeUint256.add(balance, Uint256(1, 0))
-        let (owner) = ERC721_owner.read()
-
-        ERC721_balance.write(token_id)
-        ERC721_token_uri.write(token_id, content)
-        Transfer.emit(0, owner, token_id)
-
+        _mint(content)
         return ()
+    end
+
+    func mint_by_type{
+        pedersen_ptr: HashBuiltin*,
+        syscall_ptr: felt*,
+        range_check_ptr
+    }(moment_type: felt, content: felt):
+        alloc_locals
+
+        let (local token_id: Uint256) = _mint(content)
+        let (local _moment_type_index) = moment_type_index.read(moment_type)
+        token_by_moment_type.write(moment_type=moment_type, index=_moment_type_index, value=token_id)
+        moment_type_index.write(moment_type=moment_type, value=_moment_type_index + 1)
     end
 
     func burn{
@@ -194,6 +245,56 @@ namespace SoulMoment:
     #
     # Internal functions
     #
+
+    func _mint{
+        pedersen_ptr: HashBuiltin*,
+        syscall_ptr: felt*,
+        range_check_ptr
+    }(content: felt) -> (token_id: Uint256):
+        with_attr error_message("SoulMoment: cannot mint with blank content"):
+            assert_not_zero(content)
+        end
+
+        let (balance: Uint256) = ERC721_balance.read()
+        let (token_id: Uint256) = SafeUint256.add(balance, Uint256(1, 0))
+        let (owner) = ERC721_owner.read()
+
+        ERC721_balance.write(token_id)
+        ERC721_token_uri.write(token_id, content)
+
+        Transfer.emit(0, owner, token_id)
+
+        return (token_id)
+    end
+
+    func _read_token_by_moment_type{
+        pedersen_ptr: HashBuiltin*,
+        syscall_ptr: felt*,
+        range_check_ptr
+    }(
+        moment_type: felt, 
+        arr_index: felt,
+        arr_len: felt,
+        arr: Token*
+    ):
+        if arr_index == arr_len:
+            return ()
+        end
+
+        let (token_id: Uint256) = moment_type_index.read(moment_type, arr_index)
+        let (token_uri) = ERC721_token_uri.read(token_id)
+
+        assert arr[arr_index] = Token(id=token_id, uri=token_uri)
+
+        _read_token_by_moment_type(
+            moment_type=moment_type,
+            arr_index=arr_index + 1,
+            arr_len=arr_len,
+            arr=arr
+        )
+
+        return ()
+    end
 
     func _exists{
         syscall_ptr: felt*,
