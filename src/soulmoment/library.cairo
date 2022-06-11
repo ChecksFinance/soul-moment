@@ -63,7 +63,7 @@ func moment_type_index(moment_type: felt) -> (res: felt):
 end
 
 @storage_var
-func token_by_moment_type(moment_type: felt, index: felt) -> (token_id: Uint256k):
+func token_by_moment_type(moment_type: felt, index: felt) -> (token_id: Uint256):
 end
 
 namespace SoulMoment:
